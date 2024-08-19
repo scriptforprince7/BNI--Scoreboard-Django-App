@@ -3,3 +3,43 @@
     <input type="file" name="file" required>
     <button type="submit">Upload Member File</button>
 </form>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.querySelector('form').onsubmit = function(event) {
+        event.preventDefault(); // Prevent form submission
+        
+        const formData = new FormData(this);
+
+        fetch(this.action, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                Swal.fire({
+                    icon: 'success',
+                    title: data.message,
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(() => {
+                    window.location.href = data.redirect_url;
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: data.message,
+                });
+            }
+        })
+        .catch(error => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'An unexpected error occurred. Please try again.',
+            });
+        });
+    };
+</script>

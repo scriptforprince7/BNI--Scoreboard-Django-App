@@ -1,0 +1,89 @@
+<!-- templates/final_data.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Data</title>
+</head>
+<body>
+    <h1>Final Data</h1>
+
+    <h2>Member Data</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Presence Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in member_data %}
+            <tr>
+                <td>{{ item.First_Name }}</td>
+                <td>{{ item.Last_Name }}</td>
+                <td>{{ item.Count }}</td> <!-- Display the count here -->
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Palms Report Data</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>P</th>
+                <th>A</th>
+                <th>L</th>
+                <th>M</th>
+                <th>S</th>
+                <th>RGI</th>
+                <th>RGO</th>
+                <th>RRI</th>
+                <th>RRO</th>
+                <th>V</th>
+                <th>Absent Score</th>
+                <th>Late Score</th>
+                <th>Referral Score</th>
+                <th>Visitor Score</th>
+                <th>TYFCB Score</th>
+                <th>Testimonial Score</th>
+                <th>Total Score</th>
+                <th>Projected Score</th>
+                <!-- Add more columns as necessary -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in palms_data %}
+                <tr>
+                    <td>{{ item.First_Name }}</td> <!-- Assuming you have renamed the column in the DataFrame -->
+                    <td>{{ item.Last_Name }}</td>
+                    <td>{{ item.P }}</td>
+                    <td>{{ item.A }}</td>
+                    <td>{{ item.L }}</td>
+                    <td>{{ item.M }}</td>
+                    <td>{{ item.S }}</td>
+                    <td>{{ item.RGI }}</td>
+                    <td>{{ item.RGO }}</td>
+                    <td>{{ item.RRI }}</td>
+                    <td>{{ item.RRO }}</td>
+                    <td>{{ item.V }}</td>
+                    <td>{{ item.Absent_Score }}</td>
+                    <td>{{ item.Late_Score }}</td>
+                    <td>{{ item.Referral_Score }}</td>
+                    <td>{{ item.Visitor_Score }}</td>
+                    <td>{{ item.TYFCB_Score }}</td>
+                    <td>{{ item.Testimonial_Score }}</td>
+                    <td>{{ item.Total_Score }}</td>
+                    <td>{{ item.Projected_Score }}</td>
+                    <!-- Add more columns as necessary -->
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

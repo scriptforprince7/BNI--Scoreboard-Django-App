@@ -25,4 +25,5 @@ urlpatterns = [
     path('', home, name='home'),
     path('upload-member-file/', views.upload_member_file, name='upload_member_file'),
     path('upload-palms-report/', views.upload_palms_report, name='upload_palms_report'),
+    path('final-data/', views.final_data_view, name='final_data'),  # Add this line
 ]
