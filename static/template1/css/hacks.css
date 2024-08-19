@@ -1,0 +1,53 @@
+html.bg-white {
+  background-color: white;
+}
+
+.flex.align-center.justify-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-section-upload {
+  height: 65vh;
+  margin-top: 300px;
+}
+
+.input-group {
+  align-items: center;
+}
+
+.input-group {
+  text-align: center;
+  width: 700px;
+  display: flex;
+  justify-content: space-between;
+  margin: 0 auto;
+  border-radius: 10px;
+  text-align: center;
+  border: 1px solid black;
+}
+
+button.btn:nth-child(2) {
+  padding: 20px 20px;
+  background-color: black;
+}
+
+.input-group {
+  justify-content: space-between;
+}
+
+#id_file {
+  padding-left: 20px;
+}
+
+
+#memberScoreCard .modal-content {
+  aspect-ratio: 3 / 2;
+}
+
+@media (max-width: 768px) {
+  #memberScoreCard .modal-content {
+      aspect-ratio: 2 / 3;
+  }
+}

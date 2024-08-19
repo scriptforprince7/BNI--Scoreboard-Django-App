@@ -1,0 +1,28 @@
+td.scores {
+  color: #e70017;
+    
+}
+
+td.score-low {
+  /* background-color: #f8d7da; */
+  color: #e70017;
+}
+
+td.score-medium {
+  /* background-color: #fff3cd; */
+  color: #b4a800;
+}
+
+td.score-high {
+  /* background-color: #d4edda; */
+  color: #0045a0;
+}
+
+td.score-very-high {
+  /* background-color: #c3e6cb; */
+  color: #00a727;
+}
+
+tr.table-striped {
+  vertical-align: middle;
+}

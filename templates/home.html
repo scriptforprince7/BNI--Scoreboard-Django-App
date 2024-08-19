@@ -1,0 +1,329 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html
+  lang="en"
+  data-layout="vertical"
+  data-topbar="light"
+  data-sidebar="dark"
+  data-sidebar-size="lg"
+  data-sidebar-image="none"
+  data-preloader="disable"
+  data-theme="default"
+  data-theme-colors="default"
+>
+  <head>
+    <meta charset="utf-8" />
+    <title>Score Card | BNI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href={% static 'template1/images/newimagefolder/bni.jpg' %} />
+    <link href="{% static 'template1/libs/swiper/swiper-bundle.min.css' %}" rel="stylesheet" type="text/css" />
+    <script src="{% static 'template1/js/layout.js' %}"></script>
+    <link href="{% static 'template1/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'template1/css/icons.min.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'template1/css/app.min.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'template1/css/custom.min.css' %}" rel="stylesheet" type="text/css" />
+  </head>
+
+  <body data-bs-spy="scroll" data-bs-target="#navbar-example">
+    <div class="layout-wrapper landing">
+      <nav class="navbar navbar-expand-lg navbar-landing fixed-top" id="navbar">
+        <div class="container">
+          <a class="navbar-brand" href="/">
+            <img src="{% static 'template1/images/newimagefolder/bni.jpg' %}" class="card-logo card-logo-dark" alt="logo dark" height="70" />
+            <img src="{% static 'template1/images/newimagefolder/bni.jpg' %}" class="card-logo card-logo-light" alt="logo light" height="70" />
+          </a>
+          <button
+            class="navbar-toggler py-0 fs-20 text-body"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <i class="mdi mdi-menu"></i>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mx-auto mt-2 mt-lg-0" id="navbar-example">
+              {% comment %}
+              <li class="nav-item">
+                <a class="nav-link active" href="#hero">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#services">Services</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#features">Features</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#plans">Plans</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#reviews">Reviews</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#team">Team</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#contact">Contact</a>
+              </li>
+              {% endcomment %}
+            </ul>
+            <div class="">
+              {% comment %} <button data-bs-toggle="modal" type="button" data-bs-target="#topmodal"></button> {% endcomment %}
+              <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#aboutProject">Read About This Project</button>
+            </div>
+          </div>
+
+          <!-- Vertically Centered -->
+          <div class="modal-dialog modal-dialog-centered">{% comment %} ... {% endcomment %}</div>
+        </div>
+      </nav>
+
+
+      <div class="vertical-overlay" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent.show"></div>
+      <div class="modal fade" id="aboutProject" aria-hidden="true" aria-labelledby="..." tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-body p-5">
+              <h2>Project Introduction</h2>
+              <p>
+                Welcome to the Employee Score Management System, a web application designed to manage and visualize employee performance scores. This system allows users to upload
+                performance data from Excel or CSV files, preview and confirm the data, and view the scores with color-coded indicators to easily identify performance levels. The
+                application categorizes scores into different classes such as low, medium, high, and very high, providing a clear visual representation of each employee's
+                performance.
+              </p>
+
+              <h3>Features</h3>
+              <ul>
+                <li><strong>Upload Scores</strong>: Easily upload employee performance data from Excel or CSV files.</li>
+                <li><strong>Preview Data</strong>: Preview the uploaded data before confirming the upload to the database.</li>
+                <li><strong>Score Visualization</strong>: View the employee scores with color-coded indicators to quickly assess performance levels.</li>
+                <li><strong>Score Classes</strong>: Automatically categorize scores into low, medium, high, and very high classes.</li>
+              </ul>
+
+              <h3>To-do</h3>
+              <ul>
+                <li>xls support [fix]</li>
+              </ul>
+              <p>This setup ensures a smooth and intuitive user experience for managing and visualizing employee performance data.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <section style="height: 95vh" class="section pb-0 hero-section" id="hero">
+        <div class="bg-overlay bg-overlay-pattern"></div>
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-lg-8 col-sm-10">
+              <div class="text-center mt-lg-5 pt-5">
+                <h1 class="display-6 fw-semibold mb-3 lh-base">
+                  <span class="text-dark"> Score Management System </span>
+                </h1>
+                <p class="lead text-muted lh-base">
+                  Welcome to the Score Management System, a web application designed to manage and visualize member's performance scores. This system allows admins to upload
+                  performance data from Excel or CSV files, preview and confirm the data, and view the scores with color-coded indicators to easily identify performance levels.
+                </p>
+
+                <div class="d-flex gap-2 justify-content-center mt-4">
+                  <a href="scores/upload/" class="btn btn-primary">Upload Report <i class="ri-arrow-right-line align-middle ms-1"></i></a>
+                  <a href="scores" class="btn btn-dark">View Score <i class="ri-eye-line align-middle ms-1"></i></a>
+                </div>
+              </div>
+
+              <div style="display: none" class="mt-4 mt-sm-5 pt-sm-5 mb-sm-n5 demo-carousel">
+                <div class="demo-img-patten-top d-none d-sm-block">
+                  <img src="{% static 'template1/images/landing/img-pattern.png' %}" class="d-block img-fluid" alt="..." />
+                </div>
+                <div class="demo-img-patten-bottom d-none d-sm-block">
+                  <img src="{% static 'template1/images/landing/img-pattern.png' %}" class="d-block img-fluid" alt="..." />
+                </div>
+                <div class="carousel slide carousel-fade" data-bs-ride="carousel">
+                  <div class="carousel-inner shadow-lg p-2 bg-white rounded">
+                    <div class="carousel-item active" data-bs-interval="2000">
+                      <img src="{% static 'template1/images/demos/default.png' %}" class="d-block w-100" alt="..." />
+                    </div>
+                    <div class="carousel-item" data-bs-interval="2000">
+                      <img src="{% static 'template1/images/demos/saas.png' %}" class="d-block w-100" alt="..." />
+                    </div>
+                    <div class="carousel-item" data-bs-interval="2000">
+                      <img src="{% static 'template1/images/demos/material.png' %}" class="d-block w-100" alt="..." />
+                    </div>
+                    <div class="carousel-item" data-bs-interval="2000">
+                      <img src="{% static 'template1/images/demos/minimal.png' %}" class="d-block w-100" alt="..." />
+                    </div>
+                    <div class="carousel-item" data-bs-interval="2000">
+                      <img src="{% static 'template1/images/demos/creative.png' %}" class="d-block w-100" alt="..." />
+                    </div>
+                    <div class="carousel-item" data-bs-interval="2000">
+                      <img src="{% static 'template1/images/demos/modern.png' %}" class="d-block w-100" alt="..." />
+                    </div>
+                    <div class="carousel-item" data-bs-interval="2000">
+                      <img src="{% static 'template1/images/demos/interactive.png' %}" class="d-block w-100" alt="..." />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="position-absolute start-0 end-0 bottom-0 hero-shape-svg">
+          <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1440 120">
+            <g mask='url("#SvgjsMask1003")' fill="none">
+              <path d="M 0,118 C 288,98.6 1152,40.4 1440,21L1440 140L0 140z"></path>
+            </g>
+          </svg>
+        </div>
+      </section>
+
+      <footer class="custom-footer bg-dark py-2 position-relative">
+        <div class="container">
+          {% comment %}
+          <div class="row">
+            <div class="col-lg-4 mt-4">
+              <div>
+                <div>
+                  <img src="{% static 'template1/images/newimagefolder/bni.jpg' %}" alt="logo light" height="17" />
+                </div>
+                <div class="mt-4 fs-13">
+                  <p>Score Management System</p>
+                  <p class="ff-secondary">
+                    This system allows admins to upload performance data from Excel or CSV files, preview and confirm the data, and view the scores with color-coded indicators to
+                    easily identify performance levels.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-7 ms-lg-auto">
+              <div class="row">
+                <div class="col-sm-4 mt-4">
+                  <h5 class="text-white mb-0">Company</h5>
+                  <div class="text-muted mt-3">
+                    <ul class="list-unstyled ff-secondary footer-list">
+                      <li><a href="pages-profile.html">About Us</a></li>
+                      <li><a href="pages-gallery.html">Gallery</a></li>
+                      <li>
+                        <a href="apps-projects-overview.html">Projects</a>
+                      </li>
+                      <li><a href="pages-timeline.html">Timeline</a></li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-sm-4 mt-4">
+                  <h5 class="text-white mb-0">Apps Pages</h5>
+                  <div class="text-muted mt-3">
+                    <ul class="list-unstyled ff-secondary footer-list">
+                      <li><a href="pages-pricing.html">Calendar</a></li>
+                      <li><a href="apps-mailbox.html">Mailbox</a></li>
+                      <li><a href="apps-chat.html">Chat</a></li>
+                      <li><a href="apps-crm-deals.html">Deals</a></li>
+                      <li><a href="apps-tasks-kanban.html">Kanban Board</a></li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-sm-4 mt-4">
+                  <h5 class="text-white mb-0">Support</h5>
+                  <div class="text-muted mt-3">
+                    <ul class="list-unstyled ff-secondary footer-list">
+                      <li><a href="pages-faqs.html">FAQ</a></li>
+                      <li><a href="pages-faqs.html">Contact</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endcomment %}
+
+          <div class="row text-center text-sm-start align-items-center mt-1">
+            <div class="col-sm-6">
+              <div>
+                <p class="copy-rights mb-0">
+                  <script>
+                    {% comment %} document.write(new Date().getFullYear()); {% endcomment %}
+                  </script>
+                  Score Management System | Development Version (Beta 1.0)
+                </p>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="text-sm-end mt-1 mt-sm-0">
+                <ul class="list-inline mb-0 footer-social-link">
+                  <li class="list-inline-item">
+                    <a href="https://www.facebook.com/BNInewdelhi/" target="_blank" class="avatar-xs d-block">
+                      <div class="avatar-title rounded-circle">
+                        <i class="ri-facebook-fill"></i>
+                      </div>
+                    </a>
+                  </li>
+                  <li class="list-inline-item">
+                    <a href="https://www.instagram.com/bninewdelhi/" target="_blank" class="avatar-xs d-block">
+                      <div class="avatar-title rounded-circle">
+                        <i class="ri-instagram-fill"></i>
+                      </div>
+                    </a>
+                  </li>
+                  <li class="list-inline-item">
+                    <a href="https://www.linkedin.com/company/bninewdelhi/?originalSubdomain=in" target="_blank" class="avatar-xs d-block">
+                      <div class="avatar-title rounded-circle">
+                        <i class="ri-linkedin-fill"></i>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
+
+      <button onclick="topFunction()" class="btn btn-danger btn-icon landing-back-top" id="back-to-top">
+        <i class="ri-arrow-up-line"></i>
+      </button>
+    </div>
+
+    <script src="{% static 'template1/libs/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'template1/libs/simplebar/simplebar.min.js' %}"></script>
+    <script src="{% static 'template1/libs/node-waves/waves.min.js' %}"></script>
+    <script src="{% static 'template1/libs/feather-icons/feather.min.js' %}"></script>
+    <script src="{% static 'template1/js/pages/plugins/lord-icon-2.1.0.js' %}"></script>
+    <script src="{% static 'template1/js/plugins.js' %}"></script>
+
+    <script src="{% static 'template1/libs/swiper/swiper-bundle.min.js' %}"></script>
+
+    <script src="{% static 'template1/js/pages/landing.init.js' %}"></script>
+    <script type="text/javascript">
+      if ('WebSocket' in window) {
+        (function () {
+          function refreshCSS() {
+            var sheets = [].slice.call(document.getElementsByTagName('link'));
+            var head = document.getElementsByTagName('head')[0];
+            for (var i = 0; i < sheets.length; ++i) {
+              var elem = sheets[i];
+              head.removeChild(elem);
+              var rel = elem.rel;
+              if ((elem.href && typeof rel != 'string') || rel.length == 0 || rel.toLowerCase() == 'stylesheet') {
+                var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+                elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + new Date().valueOf();
+              }
+              head.appendChild(elem);
+            }
+          }
+          var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+          var address = protocol + window.location.host + window.location.pathname + '/ws';
+          var socket = new WebSocket(address);
+          socket.onmessage = function (msg) {
+            if (msg.data == 'reload') window.location.reload();
+            else if (msg.data == 'refreshcss') refreshCSS();
+          };
+          console.log('Live reload enabled.');
+        })();
+      }
+    </script>
+  </body>
+</html>
