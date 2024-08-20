@@ -62,8 +62,6 @@ def upload_palms_report(request):
             # Read the file with headers
             df = pd.read_excel(file_path, engine='openpyxl', header=7)
 
-            print("Columns in DataFrame:", df.columns.tolist())
-
             # Define the expected columns
             expected_columns = [
                 'First Name', 'Last Name', 'P', 'A', 'L', 'M', 'S', 'RGI', 'RGO', 'RRI', 'RRO', 'V', '1-2-1', 'TYFCB', 'CEU', 'T'
@@ -71,6 +69,16 @@ def upload_palms_report(request):
 
             # Ensure that we are working with the expected columns
             df = df[expected_columns]
+
+            # Rename columns to match the desired template variable names
+            df.rename(columns={'First Name': 'First_Name', 'Last Name': 'Last_Name'}, inplace=True)
+
+            # Fetch the member data from session
+            member_data = request.session.get('member_data', [])
+            member_df = pd.DataFrame(member_data)
+
+            # Merge the PALMS data with member data to include the training value (Count)
+            df = df.merge(member_df, how='left', on=['First_Name', 'Last_Name'])
 
             # Calculate additional fields
             df['Absent_Score'] = df['A'].map({0: 15, 1: 10, 2: 5, 3: 0})
@@ -98,8 +106,15 @@ def upload_palms_report(request):
                 5 if x == 1 else 0
             )
 
-            # Calculate the total score and assign the color
-            df['Total_Score'] = df[['Absent_Score', 'Late_Score', 'Referral_Score', 'Visitor_Score', 'TYFCB_Score', 'Testimonial_Score']].sum(axis=1)
+            # Calculate the training score based on the Count column
+            df['training_Score'] = df['Count'].apply(lambda x: 
+                15 if x >= 3 else
+                10 if x == 2 else
+                5 if x == 1 else 0
+            )
+
+            # Calculate the total score
+            df['Total_Score'] = df[['Absent_Score', 'Late_Score', 'Referral_Score', 'Visitor_Score', 'TYFCB_Score', 'Testimonial_Score', 'training_Score']].sum(axis=1)
             df['Projected_Score'] = df['Total_Score'].apply(lambda x:
                 'Green' if x >= 70 else
                 'Amber' if x >= 50 else
@@ -123,6 +138,9 @@ def upload_palms_report(request):
         })
 
     return render(request, 'upload_palms_report.html')
+
+
+
     
 
 def final_data_view(request):

@@ -36,21 +36,19 @@
             <tr>
                 <th>First Name</th>
                 <th>Last Name</th>
-                <th>P</th>
-                <th>A</th>
-                <th>L</th>
-                <th>M</th>
-                <th>S</th>
-                <th>RGI</th>
-                <th>RGO</th>
-                <th>RRI</th>
-                <th>RRO</th>
-                <th>V</th>
+                <th>Absent Value</th>
+                <th>Late Value</th>
+                <th>Visitors Value</th>
+                <th>Referral Value</th>
+                <th>TYFCB Value</th>
+                <th>Testimonial Value</th>
+                <th>Training Value</th>
                 <th>Absent Score</th>
                 <th>Late Score</th>
                 <th>Referral Score</th>
                 <th>Visitor Score</th>
                 <th>TYFCB Score</th>
+                <th>Training Score</th>
                 <th>Testimonial Score</th>
                 <th>Total Score</th>
                 <th>Projected Score</th>
@@ -60,23 +58,21 @@
         <tbody>
             {% for item in palms_data %}
                 <tr>
-                    <td>{{ item.First_Name }}</td> <!-- Assuming you have renamed the column in the DataFrame -->
+                    <td>{{ item.First_Name }}</td>
                     <td>{{ item.Last_Name }}</td>
-                    <td>{{ item.P }}</td>
                     <td>{{ item.A }}</td>
                     <td>{{ item.L }}</td>
-                    <td>{{ item.M }}</td>
-                    <td>{{ item.S }}</td>
-                    <td>{{ item.RGI }}</td>
-                    <td>{{ item.RGO }}</td>
-                    <td>{{ item.RRI }}</td>
-                    <td>{{ item.RRO }}</td>
                     <td>{{ item.V }}</td>
+                    <td>{{ item.RGI|add:item.RGO }}</td>
+                    <td>{{ item.TYFCB }}</td>
+                    <td>{{ item.T }}</td>
+                    <td>{{ item.Count }}</td> <!-- Display the training value here -->
                     <td>{{ item.Absent_Score }}</td>
                     <td>{{ item.Late_Score }}</td>
                     <td>{{ item.Referral_Score }}</td>
                     <td>{{ item.Visitor_Score }}</td>
                     <td>{{ item.TYFCB_Score }}</td>
+                    <td>{{ item.training_Score }}</td>
                     <td>{{ item.Testimonial_Score }}</td>
                     <td>{{ item.Total_Score }}</td>
                     <td>{{ item.Projected_Score }}</td>
