@@ -1,5 +1,7 @@
 <!-- templates/final_data.html -->
 {% load static %}
+{% load custom_filters %}
+
 
 
 <!DOCTYPE html>
@@ -8,14 +10,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Scoreboard</title>
+    <script src="{% static 'template1/js/layout.js' %}"></script>
+    <link href="{% static 'template1/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css" />
 </head>
 <body>
     {% comment %} <h1 style="color: red;">The Scoreboard...</h1> {% endcomment %}
-   <div style="text-align: center;"><img src="{% static 'assets/bni-delhi.jpg' %}" class="card-logo card-logo-light" alt="logo light" height="45" /> <p style="font-size: 18px;">Chapters Member - <span style="color: red;">TRAFFIC </span> <span style="color: #8B8000;">LIGHT</span> <span style="color: green;">REPORT</span>  </p>
+   <div style="text-align: center; margin-top: 14px;"><img src="{% static 'assets/bni-delhi.jpg' %}" class="card-logo card-logo-light" alt="logo light" height="45" /> <p style="font-size: 18px;">Chapters Member - <span style="color: red;">TRAFFIC </span> <span style="color: #8B8000;">LIGHT</span> <span style="color: green;">REPORT</span>  </p>
 <p></p>
 </div> 
 
-    <table border="1">
+    <table class="table-bordered">
         <thead>
             <style>
                 .header-darkblue {
@@ -77,21 +81,39 @@
             {% for item in palms_data %}
                 <tr>
                     <td class="center-align">{{ forloop.counter }}</td>
-                    <td class="center-align">{{ item.First_Name }} {{ item.Last_Name }}</td>
+                    <td class="center-align btn" 
+                data-bs-toggle="modal" 
+                data-bs-target="#aboutProject" 
+                data-id="{{ item.id }}" 
+                data-first-name="{{ item.First_Name }}" 
+                data-last-name="{{ item.Last_Name }}"
+                data-absent-score="{{ item.Absent_Score }}"
+                data-late-score="{{ item.Late_Score }}"
+                data-visitor-score="{{ item.Visitor_Score }}"
+                data-referral-score="{{ item.Referral_Score }}"
+                data-tyfcb-score="{{ item.TYFCB_Score }}"
+                data-testimonial-score="{{ item.Testimonial_Score }}"
+                data-training-score="{{ item.training_Score }}"
+                data-total-score="{{ item.Total_Score }}"
+            >
+                {{ item.First_Name }} {{ item.Last_Name }}
+            </td>
                     <td class="center-align">{{ item.A }}</td>
                     <td class="center-align" style="
-                    {% if item.Absent_Score == 15 %}
-                        background-color: green; color: white;
-                    {% elif item.Absent_Score == 10 %}
-                        background-color: #FFBF00; color: white;
-                    {% elif item.Absent_Score == 5 %}
-                        background-color: yellow; color: black;
-                    {% elif item.Absent_Score == 0 %}
-                        background-color: pink; color: black;
-                    {% endif %}
-                ">
-                    {{ item.Absent_Score|floatformat:0 }}
-                </td>
+                        {% if item.Absent_Score == 15 %}
+                            background-color: green; color: white;
+                        {% elif item.Absent_Score == 10 %}
+                            background-color: #FFBF00; color: white;
+                        {% elif item.Absent_Score == 5 %}
+                            background-color: yellow; color: black;
+                        {% elif item.Absent_Score == 0 %}
+                            background-color: pink; color: black;
+                        {% endif %}
+                    ">
+                        {{ item.Absent_Score|floatformat:0 }}
+                    </td>
+                    
+        
                     <td class="center-align">{{ item.L }}</td>
                     <td class="center-align" style="
                         {% if item.Late_Score == 5 %}
@@ -102,69 +124,76 @@
                     ">
                         {{ item.Late_Score }}
                     </td>
+                    
+        
                     <td class="center-align">{{ item.V }}</td>
                     <td class="center-align" style="
-                    {% if item.Visitor_Score >= 20 %}
-                        background-color: green; color: white;
-                    {% elif item.Visitor_Score >= 13 %}
-                        background-color: #FFBF00; color: white;
-                    {% elif item.Visitor_Score >= 7 %}
-                        background-color: yellow; color: black;
-                    {% elif item.Visitor_Score >= 3 %}
-                        background-color: grey; color: white;
-                    {% else %}
-                        background-color: pink; color: black;
-                    {% endif %}
-                ">
-                    {{ item.Visitor_Score }}
-                </td>
+                        {% if item.Visitor_Score >= 20 %}
+                            background-color: green; color: white;
+                        {% elif item.Visitor_Score >= 13 %}
+                            background-color: #FFBF00; color: white;
+                        {% elif item.Visitor_Score >= 7 %}
+                            background-color: yellow; color: black;
+                        {% elif item.Visitor_Score >= 3 %}
+                            background-color: grey; color: white;
+                        {% else %}
+                            background-color: pink; color: black;
+                        {% endif %}
+                    ">
+                        {{ item.Visitor_Score }}
+                    </td>
+                    
+        
                     <td class="center-align">{{ item.RGI|add:item.RGO }}</td>
                     <td class="center-align" style="
-                    {% if item.Referral_Score >= 32 %}
-                        background-color: green; color: white;
-                    {% elif item.Referral_Score >= 26 %}
-                        background-color: #FFBF00; color: white;
-                    {% elif item.Referral_Score >= 20 %}
-                        background-color: yellow; color: black;
-                    {% elif item.Referral_Score >= 13 %}
-                        background-color: grey; color: white;
-                    {% else %}
-                        background-color: pink; color: black;
-                    {% endif %}
-                ">
-                    {{ item.Referral_Score }}
-                </td>
-                <td class="center-align">{{ item.TYFCB }}</td>
-<td class="center-align" style="
-    {% if item.TYFCB >= 2000000 %}
-        background-color: green; color: white;
-    {% elif item.TYFCB >= 1000000 and item.TYFCB < 2000000 %}
-        background-color: #FFBF00; color: white;
-    {% elif item.TYFCB >= 500000 and item.TYFCB < 1000000 %}
-        background-color: yellow; color: black;
-    {% else %}
-        background-color: grey; color: white;
-    {% endif %}
-">
-    {{ item.TYFCB_Score}}
-</td>
-
-                
+                        {% if item.Referral_Score >= 32 %}
+                            background-color: green; color: white;
+                        {% elif item.Referral_Score >= 26 %}
+                            background-color: #FFBF00; color: white;
+                        {% elif item.Referral_Score >= 20 %}
+                            background-color: yellow; color: black;
+                        {% elif item.Referral_Score >= 13 %}
+                            background-color: grey; color: white;
+                        {% else %}
+                            background-color: pink; color: black;
+                        {% endif %}
+                    ">
+                        {{ item.Referral_Score }}
+                    </td>
+                    
+        
+                    <td class="center-align">{{ item.TYFCB }}</td>
+                    <td class="center-align" style="
+                        {% if item.TYFCB >= 2000000 %}
+                            background-color: green; color: white;
+                        {% elif item.TYFCB >= 1000000 and item.TYFCB < 2000000 %}
+                            background-color: #FFBF00; color: white;
+                        {% elif item.TYFCB >= 500000 and item.TYFCB < 1000000 %}
+                            background-color: yellow; color: black;
+                        {% else %}
+                            background-color: grey; color: white;
+                        {% endif %}
+                    ">
+                        {{ item.TYFCB_Score }}
+                    </td>
+                    
+        
                     <td class="center-align">{{ item.T }}</td>
                     <td class="center-align" style="
-                    {% if item.Testimonial_Score >= 2 %}
-                        background-color: green; color: white;
-                    {% elif item.Testimonial_Score == 1 %}
-                        background-color: #FFBF00; color: white;
-                    {% else %}
-                        background-color: pink; color: black;
-                    {% endif %}
-                ">
-                    {{ item.Testimonial_Score }}
-                </td>
+                        {% if item.Testimonial_Score >= 2 %}
+                            background-color: green; color: white;
+                        {% elif item.Testimonial_Score == 1 %}
+                            background-color: #FFBF00; color: white;
+                        {% else %}
+                            background-color: pink; color: black;
+                        {% endif %}
+                    ">
+                        {{ item.Testimonial_Score }}
+                    </td>
+                    
+        
                     <td class="center-align">{{ item.Count }}</td> <!-- Display the training value here -->
-
-
+        
                     <td class="center-align" style="
                         {% if item.training_Score >= 3 %}
                             background-color: green; color: white;
@@ -178,7 +207,8 @@
                     ">
                         {{ item.training_Score }}
                     </td>
-
+                    
+        
                     <td class="center-align" style="
                         {% if item.Projected_Score == 'Green' %}
                             background-color: green; color: white;
@@ -193,13 +223,81 @@
                         {{ item.Total_Score|floatformat:0 }}
                     </td>
                     <!-- Add more columns as necessary -->
+                    
                 </tr>
             {% endfor %}
         </tbody>
         
+        
+        
     </table>
+    <div class="modal fade" id="aboutProject" aria-hidden="true" aria-labelledby="aboutProjectLabel" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body p-5">
+                    <h2>For, <span id="modalName" style="color: red;"></span></h2>
     
-   
+                    <h3>Scores:</h3>
+                    <ul>
+                        <li><strong>Absent Score</strong>: <span id="modalAbsentScore" style="color: red;"></span> out of 15. Required Score : <b><span id="modalAbsentRequiredScore"></span></b> </li>
+                        <li><strong>Late Score</strong>: <span id="modalLateScore" style="color: red;"></span> out of 5. Required Score : <b><span id="modalLateRequiredScore"></span></b> </li>
+                        <li><strong>Visitors Score</strong>: <span id="modalVisitorScore" style="color: red;"></span> out of 20. Required Score : <b><span id="modalVisitorRequiredScore"></span></b> </li>
+                        <li><strong>Referral Score</strong>: <span id="modalReferralScore" style="color: red;"></span> out of 20. Required Score : <b><span id="modalReferralRequiredScore"></span></b> </li>
+                        <li><strong>TYFCB Score</strong>: <span id="modalTYFCBScore" style="color: red;"></span> out of 15. Required Score : <b><span id="modalTYFCBRequiredScore"></span></b> </li>
+                        <li><strong>Testimonial Score</strong>: <span id="modalTestimonialScore" style="color: red;"></span> out of 10. Required Score : <b>
+                            <span id="modalTestimonialRequiredScore"></span>
+                        </b> </li>
+                        <li><strong>Training Score</strong>: <span id="modalTrainingScore" style="color: red;"></span> out of 15. Required Score : <b><span id="modalTrainingRequiredScore"></span></b> </li>
+                    </ul>
+                    <p><span id="modalNameFull" style="color: red;"></span> Scored <b><span id="modalTotalScore"></span></b> out of 100.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var tableRows = document.querySelectorAll('tbody .btn');
+            
+            tableRows.forEach(function(row) {
+                row.addEventListener('click', function() {
+                    // Get the data attributes
+                    var firstName = row.getAttribute('data-first-name');
+                    var lastName = row.getAttribute('data-last-name');
+                    var absentScore = row.getAttribute('data-absent-score');
+                    var lateScore = row.getAttribute('data-late-score');
+                    var visitorScore = row.getAttribute('data-visitor-score');
+                    var referralScore = row.getAttribute('data-referral-score');
+                    var tyfcbScore = row.getAttribute('data-tyfcb-score');
+                    var testimonialScore = row.getAttribute('data-testimonial-score');
+                    var trainingScore = row.getAttribute('data-training-score');
+                    var totalScore = row.getAttribute('data-total-score');
+        
+                    // Update the modal content
+                    document.getElementById('modalName').textContent = firstName + ' ' + lastName;
+                    document.getElementById('modalNameFull').textContent = firstName + ' ' + lastName;
+                    document.getElementById('modalAbsentScore').textContent = absentScore;
+                    document.getElementById('modalAbsentRequiredScore').textContent = (15 - absentScore);
+                    document.getElementById('modalLateScore').textContent = lateScore;
+                    document.getElementById('modalLateRequiredScore').textContent = (5 - lateScore);
+                    document.getElementById('modalVisitorScore').textContent = visitorScore;
+                    document.getElementById('modalVisitorRequiredScore').textContent = (20 - visitorScore);
+                    document.getElementById('modalReferralScore').textContent = referralScore;
+                    document.getElementById('modalReferralRequiredScore').textContent = (20 - referralScore);
+                    document.getElementById('modalTYFCBScore').textContent = tyfcbScore;
+                    document.getElementById('modalTYFCBRequiredScore').textContent = (15 - tyfcbScore);
+                    document.getElementById('modalTestimonialScore').textContent = testimonialScore;
+                    document.getElementById('modalTestimonialRequiredScore').textContent = (10 - testimonialScore);
+                    document.getElementById('modalTrainingScore').textContent = trainingScore;
+                    document.getElementById('modalTrainingRequiredScore').textContent = (15 - trainingScore);
+                    document.getElementById('modalTotalScore').textContent = totalScore;
+                });
+            });
+        });
+        </script>
+        
+    
+    <script src="{% static 'template1/libs/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
     
 </body>
 </html>
