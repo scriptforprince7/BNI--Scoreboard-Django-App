@@ -48,6 +48,7 @@ def upload_member_file(request):
     return render(request, 'upload_member_file.html')
 
 
+
 def upload_palms_report(request):
     if request.method == 'POST' and request.FILES.get('file'):
         uploaded_file = request.FILES['file']
@@ -98,10 +99,11 @@ def upload_palms_report(request):
                 5 if x >= 3 else 0
             )
             df['TYFCB_Score'] = df['TYFCB'].apply(lambda x: 
-                15 if x >= 20 else
-                10 if x >= 10 else
-                5 if x >= 5 else 0
+                15 if x >= 2000000 else
+                10 if 1000000 <= x < 2000000 else
+                5 if 500000 <= x < 1000000 else 0
             )
+
             df['Testimonial_Score'] = df['T'].apply(lambda x: 
                 10 if x >= 2 else
                 5 if x == 1 else 0
@@ -171,6 +173,9 @@ def export_go_green_excel(request):
     # Create the 'Name' field by combining 'First_Name' and 'Last_Name'
     df['Name'] = df['First_Name'] + ' ' + df['Last_Name']
 
+    # Add a serial number (Sr No.) field
+    df['Sr No.'] = df.reset_index().index + 1  # Assuming you want 1-based index
+
     # Rename columns as specified
     df.rename(columns={
         'A': 'Absent Value',
@@ -191,7 +196,7 @@ def export_go_green_excel(request):
 
     # Define the fields to include in the export
     fields = [
-        'Name', 'Absent Value', 'Late Value', 'Visitor Value', 'Referral_Value',
+        'Sr No.', 'Name', 'Absent Value', 'Late Value', 'Visitor Value', 'Referral_Value',
         'TYFCB Vale', 'Testimonial Value', 'Training Value', 'Absents = Score',
         'Late = Score', 'Total Ref = Score', 'Total Vis = Score',
         'Total Amt = Score', 'Total Trngs = Score', 'Tot Testimonails = Score', 'Total Score'
@@ -206,6 +211,45 @@ def export_go_green_excel(request):
     # Write the DataFrame to the buffer as an Excel file
     with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
         df.to_excel(writer, sheet_name='Go Green Data', index=False)
+        workbook = writer.book
+        worksheet = writer.sheets['Go Green Data']
+
+        # Define the format for each condition
+        green_format = workbook.add_format({'bg_color': '#00FF00'})  # Green
+        amber_format = workbook.add_format({'bg_color': '#FFA500'})  # Amber (orange)
+        red_format = workbook.add_format({'bg_color': '#FF0000'})    # Red
+        grey_format = workbook.add_format({'bg_color': '#808080'})   # Grey
+
+        # Apply conditional formatting based on the Total Score
+        worksheet.conditional_format('Q2:Q{}'.format(len(df) + 1), {
+            'type': 'cell',
+            'criteria': '>=',
+            'value': 70,
+            'format': green_format
+        })
+
+        worksheet.conditional_format('Q2:Q{}'.format(len(df) + 1), {
+            'type': 'cell',
+            'criteria': 'between',
+            'minimum': 50,
+            'maximum': 69,
+            'format': amber_format
+        })
+
+        worksheet.conditional_format('Q2:Q{}'.format(len(df) + 1), {
+            'type': 'cell',
+            'criteria': 'between',
+            'minimum': 30,
+            'maximum': 49,
+            'format': red_format
+        })
+
+        worksheet.conditional_format('Q2:Q{}'.format(len(df) + 1), {
+            'type': 'cell',
+            'criteria': '<',
+            'value': 30,
+            'format': grey_format
+        })
 
     # Rewind the buffer's position to the beginning
     buffer.seek(0)

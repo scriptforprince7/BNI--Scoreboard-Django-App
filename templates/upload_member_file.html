@@ -1,8 +1,39 @@
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    <input type="file" name="file" required>
-    <button type="submit">Upload Member File</button>
-</form>
+
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'assets/reset-mail/css/bootstrap.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'assets/reset-mail/css/fontawesome-all.min.css' %}">
+
+<link rel="stylesheet" type="text/css" href="{% static 'assets/reset-mail/css/iofrm-style.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'assets/reset-mail/css/iofrm-theme16.css' %}">
+
+<div class="form-body without-side">
+    <div class="website-logo">
+        <a href="/">
+                <img src="{% static 'template1/images/newimagefolder/bni.jpg' %}" alt="">
+        </a>
+    </div>
+    <div class="row">
+        <div class="img-holder">
+            <div class="bg"></div>
+            <div class="info-holder">
+                <img src="{% static 'assets/reset-mail/images/graphic3.svg' %}" alt="">
+            </div>
+        </div>
+        <div class="form-holder">
+            <div class="form-content">
+                <div class="form-items">
+                    <h3>Upload Member Training Report File</h3>
+                    <!-- <p>We're always here to help you, reset your password with only one click.</p> -->
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="file" name="file" required>
+                        <button type="submit">Upload</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
@@ -43,3 +74,10 @@
         });
     };
 </script>
+
+
+<script src="{% static 'assets/reset-mail/js/main.js' %}"></script>
+<script src="{% static 'assets/reset-mail/js/popper.min.js' %}"></script>
+<script src="{% static 'assets/reset-mail/js/bootstrap.min.js' %}"></script>
+<script data-cfasync="false" src="{% static '../../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js' %}"></script>
+<script src="{% static 'assets/reset-mail/js/jquery.min.js' %}"></script>

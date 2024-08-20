@@ -1,89 +1,205 @@
 <!-- templates/final_data.html -->
+{% load static %}
+
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Final Data</title>
+    <title>The Scoreboard</title>
 </head>
 <body>
-    <h1>Final Data</h1>
+    {% comment %} <h1 style="color: red;">The Scoreboard...</h1> {% endcomment %}
+   <div style="text-align: center;"><img src="{% static 'assets/bni-delhi.jpg' %}" class="card-logo card-logo-light" alt="logo light" height="45" /> <p style="font-size: 18px;">Chapters Member - <span style="color: red;">TRAFFIC </span> <span style="color: #8B8000;">LIGHT</span> <span style="color: green;">REPORT</span>  </p>
+<p></p>
+</div> 
 
-    <h2>Member Data</h2>
     <table border="1">
         <thead>
+            <style>
+                .header-darkblue {
+                    background-color: darkblue;
+                    color: white;
+                    text-align: center; /* Center align header text */
+                }
+                .center-align {
+                    text-align: center; /* Center align table cell text */
+                }
+            </style>
+            
             <tr>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Presence Value</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for item in member_data %}
-            <tr>
-                <td>{{ item.First_Name }}</td>
-                <td>{{ item.Last_Name }}</td>
-                <td>{{ item.Count }}</td> <!-- Display the count here -->
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+                <th class="header-darkblue">Sr No.</th>
+                <th class="header-darkblue">Name</th>
+                <th class="header-darkblue">Absent Value</th>
+                <th class="header-darkblue" style="color: #FFD700;">Absent Score <br><br>0 = 15 <br>
+                    1 = 10 <br>
+                    2 = 5 <br>
+                    3 = 0</th>
+                <th class="header-darkblue">Late Value</th>
+                <th class="header-darkblue" style="color: #FFD700;">Late Score <br><br>    0  =  5 <br>
+                    Above 0 = 0</th>
+                <th class="header-darkblue">Visitors Value</th>
+                <th class="header-darkblue" style="color: #FFD700;">Visitor Score <br><br>20 or Above =  20 <br>
+                    Bet 13-19     = 15 <br>
+                    Bet 7-12       = 10 <br>
+                    Bet 3-6         =  5 <br>
+                    Less than  3 =  0</th>
+                <th class="header-darkblue">Referral Value</th>
+                <th class="header-darkblue" style="color: #FFD700;">Referral Score <br><br>32 or Above = 20 <br>
+                    Bet 26-31     = 15 <br>
+                    Bet 20-25     = 10 <br>
+                    Bet 13-19     =  5 <br>
+                    Less than 13 = 0</th>
+                <th class="header-darkblue">TYFCB Value</th>
+                <th class="header-darkblue" style="color: #FFD700;">TYFCB Score <br><br> 20L & Above = 15 <br>
+                    Bet 10L-19.99L = 10 <br>
+                    Bet 5L - 9.99L =  5 <br>
+                    Less Than 5L   =  0</th>
+                <th class="header-darkblue">Testimonial Value</th>
+                <th class="header-darkblue" style="color: #FFD700;">Testimonial Score <br><br> 2 & Above = 10 <br>
+                    1               =   5 <br>
+                    0               =   0</th>
+                <th class="header-darkblue">Training Value</th>
+                <th class="header-darkblue" style="color: #FFD700;">Training Score <br><br> 3 & Above = 15 <br>
+                    2 =  10 <br>
+                    1 =   5 <br>
+                    0 =   0</th>
 
-    <h2>Palms Report Data</h2>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Absent Value</th>
-                <th>Late Value</th>
-                <th>Visitors Value</th>
-                <th>Referral Value</th>
-                <th>TYFCB Value</th>
-                <th>Testimonial Value</th>
-                <th>Training Value</th>
-                <th>Absent Score</th>
-                <th>Late Score</th>
-                <th>Referral Score</th>
-                <th>Visitor Score</th>
-                <th>TYFCB Score</th>
-                <th>Training Score</th>
-                <th>Testimonial Score</th>
-                <th>Total Score</th>
-                <th>Projected Score</th>
+                <th class="header-darkblue" style="color: #FFD700;">Total Score <br><br> >= 70            =  Green <br>
+                    >= 50 & < 70 = Amber <br>
+                    >=30 & < 50  = Red <br>
+                    < 30               = Grey</th>
                 <!-- Add more columns as necessary -->
             </tr>
         </thead>
         <tbody>
             {% for item in palms_data %}
                 <tr>
-                    <td>{{ item.First_Name }}</td>
-                    <td>{{ item.Last_Name }}</td>
-                    <td>{{ item.A }}</td>
-                    <td>{{ item.L }}</td>
-                    <td>{{ item.V }}</td>
-                    <td>{{ item.RGI|add:item.RGO }}</td>
-                    <td>{{ item.TYFCB }}</td>
-                    <td>{{ item.T }}</td>
-                    <td>{{ item.Count }}</td> <!-- Display the training value here -->
-                    <td>{{ item.Absent_Score }}</td>
-                    <td>{{ item.Late_Score }}</td>
-                    <td>{{ item.Referral_Score }}</td>
-                    <td>{{ item.Visitor_Score }}</td>
-                    <td>{{ item.TYFCB_Score }}</td>
-                    <td>{{ item.training_Score }}</td>
-                    <td>{{ item.Testimonial_Score }}</td>
-                    <td>{{ item.Total_Score }}</td>
-                    <td>{{ item.Projected_Score }}</td>
+                    <td class="center-align">{{ forloop.counter }}</td>
+                    <td class="center-align">{{ item.First_Name }} {{ item.Last_Name }}</td>
+                    <td class="center-align">{{ item.A }}</td>
+                    <td class="center-align" style="
+                    {% if item.Absent_Score == 15 %}
+                        background-color: green; color: white;
+                    {% elif item.Absent_Score == 10 %}
+                        background-color: #FFBF00; color: white;
+                    {% elif item.Absent_Score == 5 %}
+                        background-color: yellow; color: black;
+                    {% elif item.Absent_Score == 0 %}
+                        background-color: pink; color: black;
+                    {% endif %}
+                ">
+                    {{ item.Absent_Score|floatformat:0 }}
+                </td>
+                    <td class="center-align">{{ item.L }}</td>
+                    <td class="center-align" style="
+                        {% if item.Late_Score == 5 %}
+                            background-color: green; color: white;
+                        {% elif item.Late_Score == 0 %}
+                            background-color: pink; color: black;
+                        {% endif %}
+                    ">
+                        {{ item.Late_Score }}
+                    </td>
+                    <td class="center-align">{{ item.V }}</td>
+                    <td class="center-align" style="
+                    {% if item.Visitor_Score >= 20 %}
+                        background-color: green; color: white;
+                    {% elif item.Visitor_Score >= 13 %}
+                        background-color: #FFBF00; color: white;
+                    {% elif item.Visitor_Score >= 7 %}
+                        background-color: yellow; color: black;
+                    {% elif item.Visitor_Score >= 3 %}
+                        background-color: grey; color: white;
+                    {% else %}
+                        background-color: pink; color: black;
+                    {% endif %}
+                ">
+                    {{ item.Visitor_Score }}
+                </td>
+                    <td class="center-align">{{ item.RGI|add:item.RGO }}</td>
+                    <td class="center-align" style="
+                    {% if item.Referral_Score >= 32 %}
+                        background-color: green; color: white;
+                    {% elif item.Referral_Score >= 26 %}
+                        background-color: #FFBF00; color: white;
+                    {% elif item.Referral_Score >= 20 %}
+                        background-color: yellow; color: black;
+                    {% elif item.Referral_Score >= 13 %}
+                        background-color: grey; color: white;
+                    {% else %}
+                        background-color: pink; color: black;
+                    {% endif %}
+                ">
+                    {{ item.Referral_Score }}
+                </td>
+                <td class="center-align">{{ item.TYFCB }}</td>
+<td class="center-align" style="
+    {% if item.TYFCB >= 2000000 %}
+        background-color: green; color: white;
+    {% elif item.TYFCB >= 1000000 and item.TYFCB < 2000000 %}
+        background-color: #FFBF00; color: white;
+    {% elif item.TYFCB >= 500000 and item.TYFCB < 1000000 %}
+        background-color: yellow; color: black;
+    {% else %}
+        background-color: grey; color: white;
+    {% endif %}
+">
+    {{ item.TYFCB_Score}}
+</td>
+
+                
+                    <td class="center-align">{{ item.T }}</td>
+                    <td class="center-align" style="
+                    {% if item.Testimonial_Score >= 2 %}
+                        background-color: green; color: white;
+                    {% elif item.Testimonial_Score == 1 %}
+                        background-color: #FFBF00; color: white;
+                    {% else %}
+                        background-color: pink; color: black;
+                    {% endif %}
+                ">
+                    {{ item.Testimonial_Score }}
+                </td>
+                    <td class="center-align">{{ item.Count }}</td> <!-- Display the training value here -->
+
+
+                    <td class="center-align" style="
+                        {% if item.training_Score >= 3 %}
+                            background-color: green; color: white;
+                        {% elif item.training_Score == 2 %}
+                            background-color: #FFBF00; color: white;
+                        {% elif item.training_Score == 1 %}
+                            background-color: yellow; color: black;
+                        {% else %}
+                            background-color: pink; color: black;
+                        {% endif %}
+                    ">
+                        {{ item.training_Score }}
+                    </td>
+
+                    <td class="center-align" style="
+                        {% if item.Projected_Score == 'Green' %}
+                            background-color: green; color: white;
+                        {% elif item.Projected_Score == 'Amber' %}
+                            background-color: orange; color: white;
+                        {% elif item.Projected_Score == 'Red' %}
+                            background-color: red; color: white;
+                        {% elif item.Projected_Score == 'Grey' %}
+                            background-color: grey; color: white;
+                        {% endif %}
+                    ">
+                        {{ item.Total_Score|floatformat:0 }}
+                    </td>
                     <!-- Add more columns as necessary -->
                 </tr>
             {% endfor %}
         </tbody>
+        
     </table>
-    <form method="GET" action="{% url 'export_go_green_excel' %}">
-        <button type="submit">Export Go Green Excel File</button>
-    </form>
+    
+   
     
 </body>
 </html>
