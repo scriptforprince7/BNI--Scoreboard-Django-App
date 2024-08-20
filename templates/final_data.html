@@ -81,5 +81,9 @@
             {% endfor %}
         </tbody>
     </table>
+    <form method="GET" action="{% url 'export_go_green_excel' %}">
+        <button type="submit">Export Go Green Excel File</button>
+    </form>
+    
 </body>
 </html>

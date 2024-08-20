@@ -7,6 +7,7 @@ from django.core.files.storage import FileSystemStorage
 from openpyxl.utils.exceptions import InvalidFileException
 from django.urls import reverse
 from pandas.errors import EmptyDataError, ParserError
+from io import BytesIO
 
 
 def home(request):
@@ -155,3 +156,62 @@ def final_data_view(request):
     }
 
     return render(request, 'final_data.html', context)
+
+
+def export_go_green_excel(request):
+    # Retrieve data from session
+    palms_data = request.session.get('palms_data', [])
+
+    # Create a DataFrame from the session data
+    df = pd.DataFrame(palms_data)
+
+    # Calculate the Referral_Value as the sum of RGO and RGI
+    df['Referral_Value'] = df['RGO'] + df['RGI']
+
+    # Create the 'Name' field by combining 'First_Name' and 'Last_Name'
+    df['Name'] = df['First_Name'] + ' ' + df['Last_Name']
+
+    # Rename columns as specified
+    df.rename(columns={
+        'A': 'Absent Value',
+        'L': 'Late Value',
+        'V': 'Visitor Value',
+        'TYFCB': 'TYFCB Vale',
+        'T': 'Testimonial Value',
+        'Count': 'Training Value',
+        'Absent_Score': 'Absents = Score',
+        'Late_Score': 'Late = Score',
+        'Referral_Score': 'Total Ref = Score',
+        'Visitor_Score': 'Total Vis = Score',
+        'TYFCB_Score': 'Total Amt = Score',
+        'training_Score': 'Total Trngs = Score',
+        'Testimonial_Score': 'Tot Testimonails = Score',
+        'Total_Score': 'Total Score'
+    }, inplace=True)
+
+    # Define the fields to include in the export
+    fields = [
+        'Name', 'Absent Value', 'Late Value', 'Visitor Value', 'Referral_Value',
+        'TYFCB Vale', 'Testimonial Value', 'Training Value', 'Absents = Score',
+        'Late = Score', 'Total Ref = Score', 'Total Vis = Score',
+        'Total Amt = Score', 'Total Trngs = Score', 'Tot Testimonails = Score', 'Total Score'
+    ]
+
+    # Filter the DataFrame to include only the specified fields
+    df = df[fields]
+
+    # Create a BytesIO buffer for the Excel file
+    buffer = BytesIO()
+
+    # Write the DataFrame to the buffer as an Excel file
+    with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
+        df.to_excel(writer, sheet_name='Go Green Data', index=False)
+
+    # Rewind the buffer's position to the beginning
+    buffer.seek(0)
+
+    # Create the HttpResponse to send the file
+    response = HttpResponse(buffer, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename=go_green_data.xlsx'
+
+    return response
