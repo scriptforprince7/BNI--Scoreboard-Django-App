@@ -37,43 +37,59 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
     document.querySelector('form').onsubmit = function(event) {
-        event.preventDefault(); // Prevent form submission
-        
-        const formData = new FormData(this);
+    event.preventDefault(); // Prevent form submission
+    
+    const formData = new FormData(this);
 
-        fetch(this.action, {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
+    fetch(this.action, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            // Show the first success SweetAlert
+            Swal.fire({
+                icon: 'success',
+                title: data.message,
+                showConfirmButton: false,
+                timer: 2000
+            }).then(() => {
+                // Show the "Processing data" SweetAlert
                 Swal.fire({
-                    icon: 'success',
-                    title: data.message,
-                    showConfirmButton: false,
-                    timer: 2000
-                }).then(() => {
-                    window.location.href = data.redirect_url;
+                    title: "Processing Data!",
+                    html: "Redirecting to data page...",
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    },
+                    willClose: () => {
+                        // Redirect to invoice page after alert closes
+                        window.location.href = data.redirect_url;
+                    }
                 });
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: data.message,
-                });
-            }
-        })
-        .catch(error => {
+            });
+        } else {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: 'An unexpected error occurred. Please try again.',
+                text: data.message,
             });
+        }
+    })
+    .catch(error => {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'An unexpected error occurred. Please try again.',
         });
-    };
+    });
+};
+
 </script>
 
 

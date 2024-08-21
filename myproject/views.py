@@ -14,133 +14,99 @@ def home(request):
     return render(request, 'home.html')
 
 
-def upload_member_file(request):
-    if request.method == 'POST' and request.FILES['file']:
-        uploaded_file = request.FILES['file']
+def upload_both_reports(request):
+    if request.method == 'POST':
+        member_file = request.FILES.get('member_file')
+        palms_file = request.FILES.get('palms_file')
 
-        if not uploaded_file.name.endswith('.xlsx'):
-            return JsonResponse({'status': 'error', 'message': 'Please upload a valid .xlsx file.'})
+        if not (member_file and palms_file):
+            return JsonResponse({'status': 'error', 'message': 'Please upload both files.'})
+
+        # Save and process the Member Training Report file
+        if not member_file.name.endswith('.xlsx'):
+            return JsonResponse({'status': 'error', 'message': 'Please upload a valid .xlsx file for Member Training Report.'})
 
         fs = FileSystemStorage()
-        file_path = fs.save(uploaded_file.name, uploaded_file)
-        file_path = fs.path(file_path)
+        member_file_path = fs.save(member_file.name, member_file)
+        member_file_path = fs.path(member_file_path)
 
         try:
-            df = pd.read_excel(file_path, engine='openpyxl', skiprows=9)
-            df.columns = ['A', 'B', 'First_Name', 'D', 'Last_Name', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P']
-            df = df[['First_Name', 'Last_Name']]
-
-            # Calculate the count of each combination of first and last names
-            name_counts = df.groupby(['First_Name', 'Last_Name']).size().reset_index(name='Count')
-
-            # Save the data including counts in the session
+            df_member = pd.read_excel(member_file_path, engine='openpyxl', skiprows=9)
+            df_member.columns = ['A', 'B', 'First_Name', 'D', 'Last_Name', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P']
+            df_member = df_member[['First_Name', 'Last_Name']]
+            name_counts = df_member.groupby(['First_Name', 'Last_Name']).size().reset_index(name='Count')
             request.session['member_data'] = name_counts.to_dict('records')
-
         except Exception as e:
-            return JsonResponse({'status': 'error', 'message': f'Failed to read the Excel file: {str(e)}'})
+            return JsonResponse({'status': 'error', 'message': f'Failed to read the Member file: {str(e)}'})
 
-        return JsonResponse({
-            'status': 'success',
-            'message': 'Data captured',
-            'redirect_url': reverse('upload_palms_report')
-        })
+        # Save and process the Palms Report file
+        if not palms_file.name.endswith('.xlsx'):
+            return JsonResponse({'status': 'error', 'message': 'Please upload a valid .xlsx file for Palms Report.'})
 
-    return render(request, 'upload_member_file.html')
-
-
-
-def upload_palms_report(request):
-    if request.method == 'POST' and request.FILES.get('file'):
-        uploaded_file = request.FILES['file']
-
-        if not uploaded_file.name.endswith('.xlsx'):
-            return JsonResponse({'status': 'error', 'message': 'Please upload a valid .xlsx file.'})
-
-        fs = FileSystemStorage()
-        file_path = fs.save(uploaded_file.name, uploaded_file)
-        file_path = fs.path(file_path)
+        palms_file_path = fs.save(palms_file.name, palms_file)
+        palms_file_path = fs.path(palms_file_path)
 
         try:
-            # Read the file with headers
-            df = pd.read_excel(file_path, engine='openpyxl', header=7)
-
-            # Define the expected columns
+            df_palms = pd.read_excel(palms_file_path, engine='openpyxl', header=7)
             expected_columns = [
                 'First Name', 'Last Name', 'P', 'A', 'L', 'M', 'S', 'RGI', 'RGO', 'RRI', 'RRO', 'V', '1-2-1', 'TYFCB', 'CEU', 'T'
             ]
-
-            # Ensure that we are working with the expected columns
-            df = df[expected_columns]
-
-            # Rename columns to match the desired template variable names
-            df.rename(columns={'First Name': 'First_Name', 'Last Name': 'Last_Name'}, inplace=True)
-
-            # Fetch the member data from session
+            df_palms = df_palms[expected_columns]
+            df_palms.rename(columns={'First Name': 'First_Name', 'Last Name': 'Last_Name'}, inplace=True)
             member_data = request.session.get('member_data', [])
             member_df = pd.DataFrame(member_data)
-
-            # Merge the PALMS data with member data to include the training value (Count)
-            df = df.merge(member_df, how='left', on=['First_Name', 'Last_Name'])
-
-            # Calculate additional fields
-            df['Absent_Score'] = df['A'].map({0: 15, 1: 10, 2: 5, 3: 0})
-            df['Late_Score'] = df['L'].apply(lambda x: 5 if x == 0 else 0)
-            df['Referral_Score'] = df.apply(lambda row: 
+            df_palms = df_palms.merge(member_df, how='left', on=['First_Name', 'Last_Name'])
+            df_palms['Absent_Score'] = df_palms['A'].map({0: 15, 1: 10, 2: 5, 3: 0})
+            df_palms['Late_Score'] = df_palms['L'].apply(lambda x: 5 if x == 0 else 0)
+            df_palms['Referral_Score'] = df_palms.apply(lambda row: 
                 20 if (row['RGO'] + row['RGI']) >= 32 else
                 15 if (row['RGO'] + row['RGI']) >= 26 else
                 10 if (row['RGO'] + row['RGI']) >= 20 else
                 5 if (row['RGO'] + row['RGI']) >= 13 else 0,
                 axis=1
             )
-            df['Visitor_Score'] = df['V'].apply(lambda x: 
+            df_palms['Visitor_Score'] = df_palms['V'].apply(lambda x: 
                 20 if x >= 20 else
                 15 if x >= 13 else
                 10 if x >= 7 else
                 5 if x >= 3 else 0
             )
-            df['TYFCB_Score'] = df['TYFCB'].apply(lambda x: 
+            df_palms['TYFCB_Score'] = df_palms['TYFCB'].apply(lambda x: 
                 15 if x >= 2000000 else
                 10 if 1000000 <= x < 2000000 else
                 5 if 500000 <= x < 1000000 else 0
             )
-
-            df['Testimonial_Score'] = df['T'].apply(lambda x: 
+            df_palms['Testimonial_Score'] = df_palms['T'].apply(lambda x: 
                 10 if x >= 2 else
                 5 if x == 1 else 0
             )
-
-            # Calculate the training score based on the Count column
-            df['training_Score'] = df['Count'].apply(lambda x: 
+            df_palms['training_Score'] = df_palms['Count'].apply(lambda x: 
                 15 if x >= 3 else
                 10 if x == 2 else
                 5 if x == 1 else 0
             )
-
-            # Calculate the total score
-            df['Total_Score'] = df[['Absent_Score', 'Late_Score', 'Referral_Score', 'Visitor_Score', 'TYFCB_Score', 'Testimonial_Score', 'training_Score']].sum(axis=1)
-            df['Projected_Score'] = df['Total_Score'].apply(lambda x:
+            df_palms['Total_Score'] = df_palms[['Absent_Score', 'Late_Score', 'Referral_Score', 'Visitor_Score', 'TYFCB_Score', 'Testimonial_Score', 'training_Score']].sum(axis=1)
+            df_palms['Projected_Score'] = df_palms['Total_Score'].apply(lambda x:
                 'Green' if x >= 70 else
                 'Amber' if x >= 50 else
                 'Red' if x >= 30 else 'Grey'
             )
-
-            # Store the data in session
-            request.session['palms_data'] = df.to_dict('records')
-
+            request.session['palms_data'] = df_palms.to_dict('records')
         except (EmptyDataError, ParserError):
-            return JsonResponse({'status': 'error', 'message': 'The file is not a valid .xlsx file or it is corrupted.'})
+            return JsonResponse({'status': 'error', 'message': 'The Palms file is not valid or is corrupted.'})
         except KeyError as e:
             return JsonResponse({'status': 'error', 'message': f'Column not found: {str(e)}'})
         except Exception as e:
-            return JsonResponse({'status': 'error', 'message': f'Failed to read the Excel file: {str(e)}'})
+            return JsonResponse({'status': 'error', 'message': f'Failed to read the Palms file: {str(e)}'})
 
+        # Both files were successfully processed, redirect to the final data page
         return JsonResponse({
-            'status': 'success', 
-            'message': 'Data captured', 
-            'redirect_url': reverse('final_data')  # Redirect to final data page
+            'status': 'success',
+            'message': 'Data Captured!',
+            'redirect_url': reverse('final_data')
         })
 
-    return render(request, 'upload_palms_report.html')
+    return render(request, 'upload_both_reports.html')
 
 
 

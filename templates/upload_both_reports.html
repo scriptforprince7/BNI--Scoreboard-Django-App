@@ -1,0 +1,172 @@
+
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'assets/reset-mail/css/bootstrap.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'assets/reset-mail/css/fontawesome-all.min.css' %}">
+
+<link rel="stylesheet" type="text/css" href="{% static 'assets/reset-mail/css/iofrm-style.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'assets/reset-mail/css/iofrm-theme16.css' %}">
+<link href="{% static 'template1/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css" />
+
+<div class="form-body without-side">
+    <div class="website-logo">
+        <a href="/">
+                <img src="{% static 'template1/images/newimagefolder/bni.jpg' %}" alt="">
+        </a>
+    </div>
+    <style>
+        .file-inputs {
+    display: flex;
+    gap: 20px; /* Adjust spacing between inputs as needed */
+}
+
+.file-input {
+    flex: 1; /* Make each input take up equal space */
+}
+
+.file-input label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+/* Add this CSS to style the status message */
+.status {
+    display: block;
+    margin-top: 0px;
+    margin-left: 50px;
+    color: green;
+    font-size: 20px;
+    visibility: hidden; /* Initially hide the status */
+}
+
+.status.show {
+    visibility: visible;
+}
+
+
+    </style>
+    <div class="row">
+        <div class="img-holder">
+            <div class="bg"></div>
+            <div class="info-holder">
+                <img src="{% static 'assets/reset-mail/images/graphic3.svg' %}" alt="">
+            </div>
+        </div>
+        <div class="form-holder">
+            <div class="form-content">
+                <div class="form-items">
+                    <h3 style="text-align: center;">Upload Files:</h3>
+                    <form id="uploadForm" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="file-inputs">
+                            <div class="file-input">
+                                <label for="member_file">Member Report:</label>
+                                <input type="file" id="member_file" name="member_file" accept=".csv, .xlsx" required>
+                                <span class="status" id="member_status"></span> <!-- Placeholder for status -->
+                            </div>
+                            <div class="file-input">
+                                <label for="palms_file">Palms Report:</label>
+                                <input type="file" id="palms_file" name="palms_file" accept=".csv, .xlsx" required>
+                                <span class="status" id="palms_status"></span> <!-- Placeholder for status -->
+                            </div>
+                        </div>
+                        <div style="text-align: center;">
+                            <button type="submit" class="btn btn-dark">Upload Both</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    
+    
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.querySelector('#uploadForm').onsubmit = function(event) {
+    event.preventDefault(); // Prevent form submission
+
+    const formData = new FormData(this);
+
+    fetch(this.action, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            Swal.fire({
+                icon: 'success',
+                title: data.message,
+                showConfirmButton: false,
+                timer: 2000
+            }).then(() => {
+                Swal.fire({
+                    title: "Processing Data!",
+                    html: "Redirecting to data page...",
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    },
+                    willClose: () => {
+                        window.location.href = data.redirect_url;
+                    }
+                });
+            });
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: data.message,
+            });
+        }
+    })
+    .catch(error => {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'An unexpected error occurred. Please try again.',
+        });
+    });
+};
+
+// Handle file input change event
+document.querySelector('#member_file').addEventListener('change', function() {
+    const statusElement = document.querySelector('#member_status');
+    const file = this.files[0];
+
+    if (file && (file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || file.type === 'text/csv')) {
+        statusElement.innerHTML = '&#10003;'; // Tick mark
+        statusElement.classList.add('show');
+    } else {
+        statusElement.innerHTML = '';
+        statusElement.classList.remove('show');
+    }
+});
+
+document.querySelector('#palms_file').addEventListener('change', function() {
+    const statusElement = document.querySelector('#palms_status');
+    const file = this.files[0];
+
+    if (file && (file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || file.type === 'text/csv')) {
+        statusElement.innerHTML = '&#10003;'; // Tick mark
+        statusElement.classList.add('show');
+    } else {
+        statusElement.innerHTML = '';
+        statusElement.classList.remove('show');
+    }
+});
+
+</script>
+
+<script src="{% static 'template1/libs/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+<script src="{% static 'assets/reset-mail/js/main.js' %}"></script>
+<script src="{% static 'assets/reset-mail/js/popper.min.js' %}"></script>
+<script src="{% static 'assets/reset-mail/js/bootstrap.min.js' %}"></script>
+<script data-cfasync="false" src="{% static '../../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js' %}"></script>
+<script src="{% static 'assets/reset-mail/js/jquery.min.js' %}"></script>
