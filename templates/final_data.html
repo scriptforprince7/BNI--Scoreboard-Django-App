@@ -146,20 +146,22 @@
         
                     <td class="center-align">{{ item.RGI|add:item.RGO }}</td>
                     <td class="center-align" style="
-                        {% if item.Referral_Score >= 32 %}
-                            background-color: green; color: white;
-                        {% elif item.Referral_Score >= 26 %}
-                            background-color: #FFBF00; color: white;
-                        {% elif item.Referral_Score >= 20 %}
-                            background-color: yellow; color: black;
-                        {% elif item.Referral_Score >= 13 %}
-                            background-color: grey; color: white;
-                        {% else %}
-                            background-color: pink; color: black;
-                        {% endif %}
-                    ">
-                        {{ item.Referral_Score }}
-                    </td>
+    {% with total_score=item.RGI|add:item.RGO %}
+        {% if total_score >= 32 %}
+            background-color: green; color: white;
+        {% elif total_score >= 26 %}
+            background-color: #FFBF00; color: white;
+        {% elif total_score >= 20 %}
+            background-color: yellow; color: black;
+        {% elif total_score >= 13 %}
+            background-color: grey; color: white;
+        {% else %}
+            background-color: pink; color: black;
+        {% endif %}
+    {% endwith %}
+">
+{{ item.Referral_Score }}
+</td>
                     
         
                     <td class="center-align">{{ item.TYFCB }}</td>
