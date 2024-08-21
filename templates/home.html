@@ -30,8 +30,8 @@
       <nav class="navbar navbar-expand-lg navbar-landing fixed-top" id="navbar">
         <div class="container">
           <a class="navbar-brand" href="/">
-            <img src="{% static 'template1/images/newimagefolder/bni.jpg' %}" class="card-logo card-logo-dark" alt="logo dark" height="70" />
-            <img src="{% static 'template1/images/newimagefolder/bni.jpg' %}" class="card-logo card-logo-light" alt="logo light" height="70" />
+            <img src="{% static 'assets/bni-delhi.jpg' %}" class="card-logo card-logo-dark" alt="logo dark" height="39" />
+            <img src="{% static 'assets/bni-delhi.jpg' %}" class="card-logo card-logo-light" alt="logo light" height="50" />
           </a>
           <button
             class="navbar-toggler py-0 fs-20 text-body"
@@ -103,11 +103,6 @@
                 <li><strong>Score Visualization</strong>: View the employee scores with color-coded indicators to quickly assess performance levels.</li>
                 <li><strong>Score Classes</strong>: Automatically categorize scores into low, medium, high, and very high classes.</li>
               </ul>
-
-              <h3>To-do</h3>
-              <ul>
-                <li>xls support [fix]</li>
-              </ul>
               <p>This setup ensures a smooth and intuitive user experience for managing and visualizing employee performance data.</p>
             </div>
           </div>
@@ -131,7 +126,11 @@
 
                 <div class="d-flex gap-2 justify-content-center mt-4">
                   <a href="/upload-both-reports" class="btn btn-primary">Upload Report <i class="ri-arrow-right-line align-middle ms-1"></i></a>
-                  <a href="scores" class="btn btn-dark">View Score <i class="ri-eye-line align-middle ms-1"></i></a>
+
+                  {% if has_data %}
+        <a href="/final-data" class="btn btn-dark">View Score <i class="ri-eye-line align-middle ms-1"></i></a>
+    {% endif %}
+                  
                 </div>
               </div>
 

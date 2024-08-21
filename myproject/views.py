@@ -11,7 +11,13 @@ from io import BytesIO
 
 
 def home(request):
-    return render(request, 'home.html')
+
+    has_data = bool(request.session.get('member_data')) and bool(request.session.get('palms_data'))
+
+    context = {
+        'has_data': has_data
+    }
+    return render(request, 'home.html', context)
 
 
 def upload_both_reports(request):
