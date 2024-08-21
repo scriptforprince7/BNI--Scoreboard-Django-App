@@ -22,11 +22,15 @@ def home(request):
 
 def upload_both_reports(request):
     if request.method == 'POST':
+        chapter_name = request.POST.get('chapter_name')
         member_file = request.FILES.get('member_file')
         palms_file = request.FILES.get('palms_file')
 
         if not (member_file and palms_file):
             return JsonResponse({'status': 'error', 'message': 'Please upload both files.'})
+
+        if not chapter_name:
+            return JsonResponse({'status': 'error', 'message': 'Please enter a chapter name.'})
 
         # Save and process the Member Training Report file
         if not member_file.name.endswith('.xlsx'):
@@ -105,6 +109,9 @@ def upload_both_reports(request):
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': f'Failed to read the Palms file: {str(e)}'})
 
+        # Save chapter name in session
+        request.session['chapter_name'] = chapter_name
+
         # Both files were successfully processed, redirect to the final data page
         return JsonResponse({
             'status': 'success',
@@ -116,20 +123,25 @@ def upload_both_reports(request):
 
 
 
+
+
     
 
 def final_data_view(request):
     # Retrieve data from session
     member_data = request.session.get('member_data', [])
     palms_data = request.session.get('palms_data', [])
+    chapter_name = request.session.get('chapter_name', 'N/A')  # Retrieve chapter name
 
     # Pass the data to the template
     context = {
         'member_data': member_data,
-        'palms_data': palms_data
+        'palms_data': palms_data,
+        'chapter_name': chapter_name,  # Include chapter name in context
     }
 
     return render(request, 'final_data.html', context)
+
 
 
 def export_go_green_excel(request):
